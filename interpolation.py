@@ -46,3 +46,21 @@ for feature, loc, target_coord in zip(features, locs, target):
 for weight in weights:
     performance_data = lower_values, upper_values = np.split(performance_data, 2, axis=0)
     performance_data = weight * lower_values + (1-weight) * upper_values
+
+print(performance_data)
+
+
+# Validation: interpolate using scipy
+from scipy.interpolate import interpn
+import pandas as pd
+
+permap = pd.read_table('permap.txt', skiprows=5, index_col=('Tin', 'RHin', 'Tout', 'mfr', 'f'))
+Pel, Qcs, Qcl = permap['Pel'][1:], permap['Qcs'][1:], permap['Qcl'][1:]
+dims = [len(feature)-1 for feature in Pel.index.levels]
+Pel_values = Pel.values.reshape(*dims)
+Qcs_values = Qcs.values.reshape(*dims)
+Qcl_values = Qcl.values.reshape(*dims)
+
+print(interpn(tuple(features), Pel_values, np.array(target))[0],
+      interpn(tuple(features), Qcs_values, np.array(target))[0],
+      interpn(tuple(features), Qcl_values, np.array(target))[0])
