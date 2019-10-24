@@ -1,2 +1,5 @@
+# directories to ignore
+ASHRAE\ Std\ 205p/
+
 # ignore .txt files
 *.txt
