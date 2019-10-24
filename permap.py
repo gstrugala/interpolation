@@ -19,12 +19,6 @@ permap = pd.DataFrame({'Pel':Pel, 'Qcs':Qcs, 'Qcl':np.zeros_like(Qcs)})
 permap.index = idx
 permap['Qcl'] = 0.8 * idx.get_level_values('RHin') * permap['Qcs']
 
-idx2 = pd.MultiIndex.from_arrays([[length] for length in lengths(Tin, RHin, Tout, mfr, f)], names=names)
-nval = pd.DataFrame([np.nan, np.nan, np.nan]).T
-nval.index, nval.columns = idx2, ['Pel', 'Qcs', 'Qcl']
-
-permap = pd.concat([nval, permap])
-
 permap.round(2).to_csv('permap.txt', sep='\t')
 
 def prepend_line(filename, line):
@@ -34,4 +28,4 @@ def prepend_line(filename, line):
         f.write(line.rstrip('\r\n') + '\n' + content)
 
 for name, values in zip(reversed(names), reversed([Tin, RHin, Tout, mfr, f])):
-    prepend_line('permap.txt', name + ' : {}'.format(values).replace('(', '').replace(')', ''))
+    prepend_line('permap.txt', name + ' has {} values: {}'.format(len(values), values).replace('(', '').replace(')', ''))

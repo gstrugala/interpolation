@@ -22,10 +22,12 @@ target = (22, 0.7, 35, 0.6, 0.4)
 
 with open('permap.txt', 'r') as f:
     features = []
+    nfeatures = []
     for _ in range(5):
-        features.append([num(v) for v in f.readline().split(' : ')[1].split(', ')])
+        s = f.readline().replace(',', '').split(' ')
+        nfeatures.append(num(s[2]))
+        features.append([num(v) for v in s[4:]])
     f.readline()
-    nfeatures = [int(float(n)) for n in f.readline().split()]
     locs = np.array([find(feature, value) for feature, value in zip(features, target)])
     nf_products = np.append(nfeatures[1:], 1)
     for i in range(len(nf_products)-2, -1, -1):
@@ -53,10 +55,9 @@ print(performance_data)
 # Validation: interpolate using scipy
 from scipy.interpolate import interpn
 import pandas as pd
-
 permap = pd.read_table('permap.txt', skiprows=5, index_col=('Tin', 'RHin', 'Tout', 'mfr', 'f'))
-Pel, Qcs, Qcl = permap['Pel'][1:], permap['Qcs'][1:], permap['Qcl'][1:]
-dims = [len(feature)-1 for feature in Pel.index.levels]
+Pel, Qcs, Qcl = permap['Pel'], permap['Qcs'], permap['Qcl']
+dims = [len(feature) for feature in Pel.index.levels]
 Pel_values = Pel.values.reshape(*dims)
 Qcs_values = Qcs.values.reshape(*dims)
 Qcl_values = Qcl.values.reshape(*dims)
