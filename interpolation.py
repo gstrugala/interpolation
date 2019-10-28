@@ -46,7 +46,7 @@ weights = []
 for feature, loc, target_coord in zip(features, locs, target):
     weights.append((feature[loc+1] - target_coord) / (feature[loc+1] - feature[loc]))
 for weight in weights:
-    performance_data = lower_values, upper_values = np.split(performance_data, 2, axis=0)
+    lower_values, upper_values = np.split(performance_data, 2, axis=0)
     performance_data = weight * lower_values + (1-weight) * upper_values
 
 print(performance_data)
