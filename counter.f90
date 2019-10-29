@@ -1,14 +1,15 @@
 program counter
     logical, dimension(5) :: C = (/.false., .false., .false., .false., .false. /)
-    print *, C
-    call increment_counter(C)
-    print *, C
-    call increment_counter(C)
-    print *, C
-    call increment_counter(C)
-    print *, C
-    call increment_counter(C)
-    print *, C
+    integer, dimension(5) :: a, b, Cint
+    a = 1
+    b = 0
+    Cint = merge(a, b, C)
+    print *, Cint
+    do i=1, 32
+        call increment_counter(C)
+        Cint = merge(a, b, C)
+        print *, Cint
+    end do
     
 contains
 
@@ -25,9 +26,10 @@ subroutine increment_counter(C)
     implicit none
     logical, intent(inout) :: C(5)
     logical :: sumcarry(2)
-    integer :: k = 2
+    integer :: k
     sumcarry = full_adder(C(1), .true., .false.)
     C(1) = sumcarry(1)
+    k = 2
     do while (sumcarry(2))
         sumcarry = full_adder(C(k), .false., sumcarry(2))
         C(k) = sumcarry(1)
