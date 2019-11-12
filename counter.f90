@@ -1,16 +1,15 @@
 program counter
-    logical, dimension(5) :: C = (/.false., .false., .false., .false., .false. /)
-    integer, dimension(5) :: a, b, Cint
-    a = 1
-    b = 0
-    Cint = merge(a, b, C)
+    logical, dimension(5) :: C = .false.
+    integer, dimension(5) :: ones = 1, zeros = 0, Cint
+
+    Cint = merge(ones, zeros, C)
     print *, Cint
     do i=1, 32
         call increment_counter(C)
-        Cint = merge(a, b, C)
+        Cint = merge(ones, zeros, C)
         print *, Cint
     end do
-    
+
 contains
 
 function full_adder(a, b, carry_in)
