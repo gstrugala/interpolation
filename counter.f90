@@ -26,13 +26,13 @@ subroutine increment_counter(C)
     logical, intent(inout) :: C(5)
     logical :: sumcarry(2)
     integer :: k
-    sumcarry = full_adder(C(1), .true., .false.)
-    C(1) = sumcarry(1)
-    k = 2
+    sumcarry = full_adder(C(5), .true., .false.)
+    C(5) = sumcarry(1)
+    k = 4
     do while (sumcarry(2))
         sumcarry = full_adder(C(k), .false., sumcarry(2))
         C(k) = sumcarry(1)
-        k = k+1
+        k = k-1
     end do
 end subroutine increment_counter
 
